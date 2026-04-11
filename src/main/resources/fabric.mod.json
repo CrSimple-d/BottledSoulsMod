@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "bottled_souls",
+  "version": "${version}",
+  "name": "Bottled Souls Mod",
+  "description": "Souls!",
+  "authors": ["CrSimple_"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/bottled_souls/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.crsimple.bottledsouls.client.ModMainClient"
+    ],
+    "main": [
+      "net.crsimple.bottledsouls.ModMain"
+    ]
+  },
+  "mixins": [
+    "bottled_souls.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "bottled_souls:item/soul_bottle_empty"
+  },
+  "overrides": [
+    {
+      "model": "bottled_souls:item/soul_bottle_empty",
+      "predicate": {
+        "custom_model_data": 0
+      }
+    },
+    {
+      "model": "bottled_souls:item/soul_bottle_full",
+      "predicate": {
+        "custom_model_data": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SGS",
+    "GBG",
+    "SGS"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:ghast_tear"
+    },
+    "B": {
+      "item": "minecraft:glass_bottle"
+    },
+    "S": {
+      "item": "minecraft:soul_sand"
+    }
+  },
+  "result": {
+    "item": "bottled_souls:soul_bottle",
+    "count": 1
+  }
+}

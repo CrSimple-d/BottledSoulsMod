@@ -1,0 +1,6 @@
+{
+  "command.bottled_souls.config:reloaded": "Конфиг успешно перезагружен",
+  "item.bottled_souls.soul_bottle.tooltip:prefix": "Душа: ",
+  "item.bottled_souls.soul_bottle": "Бутылка душ",
+  "item.bottled_souls.soul_bottle:fail": "В бутылке уже есть чья-то душа или данный моб в черном списке"
+}

@@ -1,0 +1,7 @@
+{
+  "command.bottled_souls.config:reloaded": "Yeah! Config reloaded successfully",
+  "itemGroup.bottled_souls.default": "Bottled Souls",
+  "item.bottled_souls.soul_bottle.tooltip:prefix": "Entity: ",
+  "item.bottled_souls.soul_bottle": "Soul Bottle",
+  "item.bottled_souls.soul_bottle:fail": "There is a soul in the bottle or a mob is on blacklist"
+}
