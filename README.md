@@ -1,5 +1,3 @@
-![Logo](https://cdn.modrinth.com/data/3CsYXFPB/images/0e4ba336e3f44cad2db46ec1a1d4fdccddca43e9.png)
-
 # Bottled Souls
 
 ### Core Feature
