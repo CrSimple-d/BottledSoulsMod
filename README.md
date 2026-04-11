@@ -1,4 +1,4 @@
-[ru](https://github.com/CrSimple-d/BottledSoulsMod/blob/1.20.1/RU_README.md)/[en](https://github.com/CrSimple-d/BottledSoulsMod/blob/1.20.1/README.md)
+[ru](https://github.com/CrSimple-d/BottledSoulsMod/blob/1.20.1/RU_README.md) / [en](https://github.com/CrSimple-d/BottledSoulsMod/blob/1.20.1/README.md)
 
 # Bottled Souls
 
