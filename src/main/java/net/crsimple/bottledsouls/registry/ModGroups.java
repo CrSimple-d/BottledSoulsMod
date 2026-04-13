@@ -10,15 +10,11 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 
 public class ModGroups {
-    public static RegistryKey<ItemGroup> DEFAULT_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, ModMain.idOf("default"));
-    public static ItemGroup DEFAULT_GROUP_INSTANCE = reg(FabricItemGroup.builder()
+    //public static RegistryKey<ItemGroup> DEFAULT_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, ModMain.idOf("default"));
+    public static ItemGroup DEFAULT_GROUP_INSTANCE = FabricItemGroup.builder(ModMain.idOf("default"))
             .icon(() -> ModItems.SOUL_BOTTLE.getDefaultStack())
             .displayName(Text.translatable("itemGroup.bottled_souls.default"))
-            .build(),DEFAULT_GROUP);
-
-    static ItemGroup reg(ItemGroup group, RegistryKey<ItemGroup> key) {
-        return Registry.register(Registries.ITEM_GROUP,key,group);
-    }
+            .build();
 
     public static void init() {
     }

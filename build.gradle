@@ -30,14 +30,14 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "maven.modrinth:modmenu:7.2.2"
-    modImplementation "maven.modrinth:luckperms:v5.4.102-fabric"
-    modImplementation "maven.modrinth:fabric-permissions-api:0.3.1"
-    modImplementation "maven.modrinth:kiwi:11.10.2+fabric"
-
-    modImplementation "maven.modrinth:jei:15.20.0.129"
-
-    modImplementation "maven.modrinth:sodium:mc1.20.1-0.5.12-beta.2-fabric"
+//    modImplementation "maven.modrinth:modmenu:7.2.2"
+//    modImplementation "maven.modrinth:luckperms:v5.4.102-fabric"
+//    modImplementation "maven.modrinth:fabric-permissions-api:0.3.1"
+//    modImplementation "maven.modrinth:kiwi:11.10.2+fabric"
+//
+//    modImplementation "maven.modrinth:jei:15.20.0.129"
+//
+//    modImplementation "maven.modrinth:sodium:mc1.20.1-0.5.12-beta.2-fabric"
 
     compileOnly 'net.luckperms:api:5.4'
 }

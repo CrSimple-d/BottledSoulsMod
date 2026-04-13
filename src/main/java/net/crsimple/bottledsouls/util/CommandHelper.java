@@ -9,6 +9,6 @@ public class CommandHelper {
         reply(ctx,text,false);
     }
     public static void reply(CommandContext<ServerCommandSource> ctx, Text text,boolean ops) {
-        ctx.getSource().sendFeedback(() -> text, ops);
+        ctx.getSource().sendFeedback(text, ops);
     }
 }
