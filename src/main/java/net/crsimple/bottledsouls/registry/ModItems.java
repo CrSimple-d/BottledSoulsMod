@@ -8,6 +8,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
 import java.util.function.Function;
@@ -19,11 +20,12 @@ public class ModItems {
 
     @SafeVarargs
     static Item reg(Function<Item.Settings, Item> factory, Item.Settings settings, String id, RegistryKey<ItemGroup>... groups) {
-        Item instance = factory.apply(settings);
+        Identifier identifier = ModMain.idOf(id);
+        Item instance = factory.apply(settings.registryKey(RegistryKey.of(Registries.ITEM.getKey(), identifier)));
         for (var group : groups) {
             ItemGroupEvents.modifyEntriesEvent(group).register(g -> g.add(instance.getDefaultStack()));
         }
-        return Registry.register(Registries.ITEM, ModMain.idOf(id), instance);
+        return Registry.register(Registries.ITEM, identifier, instance);
     }
     @SafeVarargs
     static Item reg(Function<Item.Settings, Item> factory, String id, RegistryKey<ItemGroup>... groups) {

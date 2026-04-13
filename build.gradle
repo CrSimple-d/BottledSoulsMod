@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.10.5'
+    id 'fabric-loom' version "${loom_version}"
     id 'maven-publish'
 }
 
@@ -30,13 +30,14 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "maven.modrinth:modmenu:11.0.4"
-    modImplementation "maven.modrinth:placeholder-api:2.4.2+1.21"
+    modImplementation "maven.modrinth:modmenu:${modmenu_version}"
+
+//    modImplementation "maven.modrinth:placeholder-api:2.4.2+1.21"
 //    modImplementation "maven.modrinth:luckperms:v5.4.102-fabric"
 //    modImplementation "maven.modrinth:fabric-permissions-api:0.3.1"
-    modImplementation "maven.modrinth:kiwi:15.8.3+fabric"
-//
-    modImplementation "maven.modrinth:jei:19.27.0.340"
+//    modImplementation "maven.modrinth:kiwi:${kiwi_version}"
+
+    modImplementation "maven.modrinth:jei:${jei_version}"
 
     compileOnly 'net.luckperms:api:5.4'
 }

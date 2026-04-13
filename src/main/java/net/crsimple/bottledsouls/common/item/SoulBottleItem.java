@@ -8,6 +8,7 @@ import net.crsimple.bottledsouls.util.PlayerUtils;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.component.type.NbtComponent;
+import net.minecraft.component.type.TooltipDisplayComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -27,6 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class SoulBottleItem extends Item {
 
@@ -43,13 +45,13 @@ public class SoulBottleItem extends Item {
 
         NbtCompound nbt = EntityNbtHelper.saveEntity(new NbtCompound(), entity);
         stack.set(ModDataComponents.ENTITY_DATA, NbtComponent.of(nbt));
-        stack.set(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(1));
+        stack.set(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(List.of(1f),List.of(),List.of(),List.of()));
 
-        if (!user.getWorld().isClient) {
+        if (!user.getEntityWorld().isClient()) {
             entity.discard();
             user.setStackInHand(hand, stack);
             PlayerUtils.damageUnlessCreative(user, stack, hand);
-            this.particles((ServerWorld) entity.getWorld(), entity);
+            this.particles((ServerWorld) entity.getEntityWorld(), entity);
         }
         return ActionResult.PASS;
     }
@@ -58,13 +60,14 @@ public class SoulBottleItem extends Item {
     public ActionResult useOnBlock(ItemUsageContext ctx) {
         if (ctx.getPlayer() == null || !hasEntity(ctx.getStack())) return ActionResult.PASS;
 
-        if (!ctx.getWorld().isClient) {
+        if (!ctx.getWorld().isClient()) {
             LivingEntity living = EntityNbtHelper.readEntity(ctx.getWorld(), getEntityNbt(ctx.getStack()), LivingEntity.class);
             BlockPos pos = ctx.getBlockPos();
             if (!ctx.getWorld().getBlockState(ctx.getBlockPos()).getCollisionShape(ctx.getWorld(), ctx.getBlockPos()).isEmpty()) {
                 pos = pos.offset(ctx.getSide());
             }
             living.setPosition(pos.getX() + 0.5d, pos.getY(), pos.getZ() + 0.5d);
+            living.setYaw(ctx.getPlayerYaw() + 180f);
             living.setHeadYaw(ctx.getPlayerYaw() + 180f);
             living.setBodyYaw(ctx.getPlayerYaw() + 180f);
             ctx.getWorld().spawnEntity(living);
@@ -88,7 +91,7 @@ public class SoulBottleItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+    public void appendTooltip(ItemStack stack, TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
         MutableText text = Text.translatable("item.bottled_souls.soul_bottle.tooltip:prefix").formatted(Formatting.YELLOW);
 
         if (hasEntity(stack)) {
@@ -99,7 +102,7 @@ public class SoulBottleItem extends Item {
                     .formatted(Formatting.GRAY));
         }
 
-        tooltip.add(text);
+        textConsumer.accept(text);
     }
 
     private void particles(ServerWorld world, LivingEntity entity) {
@@ -122,6 +125,6 @@ public class SoulBottleItem extends Item {
 
     private @Nullable NbtCompound getEntityNbt(ItemStack stack) {
         NbtComponent nbt = stack.get(ModDataComponents.ENTITY_DATA);
-        return nbt==null?null:nbt.getNbt();
+        return nbt==null?null:nbt.copyNbt();
     }
 }
