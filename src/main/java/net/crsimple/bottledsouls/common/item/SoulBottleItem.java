@@ -1,15 +1,19 @@
 package net.crsimple.bottledsouls.common.item;
 
+import net.crsimple.bottledsouls.registry.ModDataComponents;
 import net.crsimple.bottledsouls.util.EntityNbtHelper;
 import net.crsimple.bottledsouls.ModMain;
 import net.crsimple.bottledsouls.registry.ModTags;
 import net.crsimple.bottledsouls.util.PlayerUtils;
-import net.minecraft.client.item.TooltipContext;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.CustomModelDataComponent;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
@@ -20,13 +24,11 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class SoulBottleItem extends Item {
-    public static String ENTITY_KEY = "EntityData";
 
     public SoulBottleItem(Settings settings) {
         super(settings);
@@ -35,17 +37,18 @@ public class SoulBottleItem extends Item {
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
         if (shouldNotSaveEntity(stack, entity)) {
-            user.sendMessage(Text.translatable("item.bottled_souls.soul_bottle:fail").formatted(Formatting.RED),true);
+            user.sendMessage(Text.translatable("item.bottled_souls.soul_bottle:fail").formatted(Formatting.RED), true);
             return ActionResult.PASS;
         }
 
-        stack.getOrCreateNbt().put(ENTITY_KEY,EntityNbtHelper.saveEntity(new NbtCompound(),entity));
-        stack.getNbt().putInt("CustomModelData",1);
+        NbtCompound nbt = EntityNbtHelper.saveEntity(new NbtCompound(), entity);
+        stack.set(ModDataComponents.ENTITY_DATA, NbtComponent.of(nbt));
+        stack.set(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(1));
 
-        if(!user.getWorld().isClient) {
+        if (!user.getWorld().isClient) {
             entity.discard();
-            user.setStackInHand(hand,stack);
-            PlayerUtils.damageUnlessCreative(user,stack);
+            user.setStackInHand(hand, stack);
+            PlayerUtils.damageUnlessCreative(user, stack, hand);
             this.particles((ServerWorld) entity.getWorld(), entity);
         }
         return ActionResult.PASS;
@@ -61,18 +64,18 @@ public class SoulBottleItem extends Item {
             if (!ctx.getWorld().getBlockState(ctx.getBlockPos()).getCollisionShape(ctx.getWorld(), ctx.getBlockPos()).isEmpty()) {
                 pos = pos.offset(ctx.getSide());
             }
-            living.setPosition(pos.getX()+0.5d,pos.getY(),pos.getZ()+0.5d);
-            living.setHeadYaw(ctx.getPlayerYaw()+180f);
-            living.setBodyYaw(ctx.getPlayerYaw()+180f);
+            living.setPosition(pos.getX() + 0.5d, pos.getY(), pos.getZ() + 0.5d);
+            living.setHeadYaw(ctx.getPlayerYaw() + 180f);
+            living.setBodyYaw(ctx.getPlayerYaw() + 180f);
             ctx.getWorld().spawnEntity(living);
 
             this.particles((ServerWorld) ctx.getWorld(), living);
         }
 
         ItemStack stack = ctx.getStack();
-        stack.getNbt().remove(ENTITY_KEY);
-        stack.getNbt().putInt("CustomModelData",0);
-        ctx.getPlayer().setStackInHand(ctx.getHand(),stack);
+        stack.remove(ModDataComponents.ENTITY_DATA);
+        stack.set(DataComponentTypes.CUSTOM_MODEL_DATA, CustomModelDataComponent.DEFAULT);
+        ctx.getPlayer().setStackInHand(ctx.getHand(), stack);
 
         return ActionResult.PASS;
     }
@@ -85,10 +88,10 @@ public class SoulBottleItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
+    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         MutableText text = Text.translatable("item.bottled_souls.soul_bottle.tooltip:prefix").formatted(Formatting.YELLOW);
 
-        if(hasEntity(stack)) {
+        if (hasEntity(stack)) {
             text.append(Text.literal(EntityNbtHelper.parseIdentifier(getEntityNbt(stack)).toString())
                     .formatted(Formatting.RED));
         } else {
@@ -100,11 +103,11 @@ public class SoulBottleItem extends Item {
     }
 
     private void particles(ServerWorld world, LivingEntity entity) {
-        for(int i = 0; i < 20; ++i) {
+        for (int i = 0; i < 20; ++i) {
             double d = world.random.nextGaussian() * 0.02;
             double e = world.random.nextGaussian() * 0.02;
             double f = world.random.nextGaussian() * 0.02;
-            world.spawnParticles(ParticleTypes.POOF, entity.getParticleX(1.0), entity.getRandomBodyY(), entity.getParticleZ(1.0),2, d, e, f,0.1d);
+            world.spawnParticles(ParticleTypes.POOF, entity.getParticleX(1.0), entity.getRandomBodyY(), entity.getParticleZ(1.0), 2, d, e, f, 0.1d);
         }
     }
 
@@ -118,6 +121,7 @@ public class SoulBottleItem extends Item {
     }
 
     private @Nullable NbtCompound getEntityNbt(ItemStack stack) {
-        return (NbtCompound) stack.getOrCreateNbt().get(ENTITY_KEY);
+        NbtComponent nbt = stack.get(ModDataComponents.ENTITY_DATA);
+        return nbt==null?null:nbt.getNbt();
     }
 }
